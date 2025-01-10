@@ -18,11 +18,9 @@
   --gray-600: #252d4a;
   --gray-700: #181c2a;
   --gray-800: #0e1116;
-
-  --background: #1e1e1e;
 }
 
 body {
   color: var(--gray-100);
-  background: var(--background);
+  background: var(--gray-800);
 }

@@ -11,8 +11,8 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Book Wise",
-  description: "Book Wise project",
+  title: "BookWise",
+  description: "BookWise project",
 };
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className={`${nunito.className} antialiased`}>
         <Providers>{children}</Providers>
       </body>

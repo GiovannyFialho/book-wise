@@ -4,11 +4,11 @@ import Logo from "@/assets/book-wise-logo.png";
 
 import { AuthOptionButtons } from "@/components/AuthOptionButtons";
 
-export default function Home() {
+export default function SignIn() {
   return (
     <div className="flex min-h-screen flex-col p-5 md:flex-row">
       <div className="hidden w-[40%] min-w-[350px] flex-col items-center justify-center rounded-lg bg-[url('/images/cover-signIn.png')] bg-cover bg-center md:flex">
-        <Image src={Logo} alt="Book Wise" />
+        <Image src={Logo} alt="BookWise" />
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center">

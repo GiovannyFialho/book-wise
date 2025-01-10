@@ -1,1 +1,1 @@
-# Book Wise 📚
+# BookWise 📚
