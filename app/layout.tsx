@@ -3,6 +3,8 @@ import { Nunito } from "next/font/google";
 
 import "./globals.css";
 
+import { Providers } from "@/providers";
+
 const nunito = Nunito({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700", "900"],
@@ -20,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.className} antialiased`}>{children}</body>
+      <body className={`${nunito.className} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

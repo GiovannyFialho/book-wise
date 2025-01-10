@@ -1,9 +1,8 @@
 import Image from "next/image";
 
 import Logo from "@/assets/book-wise-logo.png";
-import GitHubIcon from "@/assets/icons/github-icon.svg";
-import GoogleIcon from "@/assets/icons/google-icon.svg";
-import RocketIcon from "@/assets/icons/rocket-icon.svg";
+
+import { AuthOptionButtons } from "@/components/AuthOptionButtons";
 
 export default function Home() {
   return (
@@ -22,31 +21,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <button
-              type="button"
-              className="flex items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 transition-all duration-300 hover:bg-gray-700"
-            >
-              <Image src={GoogleIcon} alt="" />
-              Entrar com Google
-            </button>
-
-            <button
-              type="button"
-              className="flex items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 transition-all duration-300 hover:bg-gray-700"
-            >
-              <Image src={GitHubIcon} alt="" />
-              Entrar com GitHub
-            </button>
-
-            <button
-              type="button"
-              className="flex items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 transition-all duration-300 hover:bg-gray-700"
-            >
-              <Image src={RocketIcon} alt="" />
-              Acessar como visitante
-            </button>
-          </div>
+          <AuthOptionButtons />
         </div>
       </div>
     </div>
