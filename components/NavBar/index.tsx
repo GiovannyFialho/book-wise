@@ -12,7 +12,9 @@ export function NavBar() {
 
   return (
     <div className="w-[230px] rounded-xl bg-[url('/images/background-nav.svg')] px-12 pb-6 pt-10">
-      <Image src={Logo} alt="BookWise" />
+      <Link href="/">
+        <Image src={Logo} alt="BookWise" />
+      </Link>
 
       <nav className="mt-10 flex flex-col gap-4">
         <Link

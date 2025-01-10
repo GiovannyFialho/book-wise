@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="mt-14 flex gap-16">
-      <Header title="Início" />
+      <Header title="Início" page="home" />
 
       <aside></aside>
     </main>
