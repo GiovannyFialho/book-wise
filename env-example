@@ -1,1 +1,16 @@
 DATABASE_URL="file:./dev.db"
+
+# Google Auth -> Google Cloud > Book Wise > APIs e Serviços > Credenciais > Next.js client
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# GitHub Auth -> GitHub Settings > Developer Settings > OAuth > Book Wise
+GITHUB_ID=
+GITHUB_SECRET=
+
+# Next
+## URL do projeto
+NEXTAUTH_URL=
+
+## Sequência de números aleatórios
+NEXTAUTH_SECRET=
