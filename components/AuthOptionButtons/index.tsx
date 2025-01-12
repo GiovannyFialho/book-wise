@@ -11,7 +11,12 @@ import RocketIcon from "@/assets/icons/rocket-icon.svg";
 
 export function AuthOptionButtons() {
   async function handleSignIn(provider: OAuthProviderType) {
-    await signIn(provider, { callbackUrl: "/home" });
+    const result = await signIn(provider, { callbackUrl: "/" });
+
+    if (result?.error) {
+      console.error("Erro ao autenticar:", result.error);
+      alert("Erro ao autenticar. Tente novamente.");
+    }
   }
 
   return (
@@ -35,7 +40,7 @@ export function AuthOptionButtons() {
       </button>
 
       <Link
-        href="/home"
+        href="/"
         className="flex items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 transition-all duration-300 hover:bg-gray-700"
       >
         <Image src={RocketIcon} alt="" />

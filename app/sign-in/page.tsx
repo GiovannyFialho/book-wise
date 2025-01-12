@@ -1,8 +1,13 @@
+import { Metadata } from "next";
 import Image from "next/image";
 
 import Logo from "@/assets/book-wise-logo.png";
 
 import { AuthOptionButtons } from "@/components/AuthOptionButtons";
+
+export const metadata: Metadata = {
+  title: "BookWise | Entrar",
+};
 
 export default function SignIn() {
   return (

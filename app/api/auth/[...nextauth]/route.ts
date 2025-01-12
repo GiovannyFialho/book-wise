@@ -2,6 +2,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 
+import { prisma } from "@/lib/prisma";
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -18,8 +20,8 @@ export const authOptions: NextAuthOptions = {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
-          username: profile.email.split("@")[0],
           avatar_url: profile.picture,
+          createdAt: null,
         };
       },
     }),
@@ -32,20 +34,43 @@ export const authOptions: NextAuthOptions = {
           id: profile.id,
           name: profile.name,
           email: profile.email,
-          username: profile.login,
           avatar_url: profile.avatar_url,
+          createdAt: null,
         };
       },
     }),
   ],
 
   callbacks: {
+    async signIn({ user }) {
+      try {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email || undefined },
+        });
+
+        if (!existingUser) {
+          await prisma.user.create({
+            data: {
+              name: user.name,
+              email: user.email,
+              avatar_url: user.avatar_url,
+            },
+          });
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Error saving user to DB:", error);
+
+        return false;
+      }
+    },
+
     async jwt({ token, account, user }) {
       if (account && user) {
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.username = user.username;
         token.avatar_url = user.avatar_url;
       }
 
@@ -53,11 +78,19 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
+      const user = await prisma.user.findUnique({
+        where: { email: token.email! },
+      });
+
+      if (user) {
+        session.user.createdAt = user.created_at;
+      }
+
       session.user = {
+        ...session.user,
         id: token.id as string,
         name: token.name as string,
         email: token.email as string,
-        username: token.username as string,
         avatar_url: token.avatar_url as string,
       };
 
