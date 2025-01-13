@@ -16,7 +16,7 @@ export function NavBar() {
   const { data: session, status: sessionStatus } = useSession();
 
   return (
-    <div className="flex w-[230px] flex-col justify-between rounded-xl bg-[url('/images/background-nav.svg')] px-12 pb-6 pt-10">
+    <div className="flex max-h-[800px] w-[230px] flex-col justify-between rounded-xl bg-[url('/images/background-nav.svg')] px-12 pb-6 pt-10">
       <div className="flex flex-col gap-10">
         <Link href="/">
           <Image src={Logo} alt="BookWise" />

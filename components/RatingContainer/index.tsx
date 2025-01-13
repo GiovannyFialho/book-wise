@@ -44,7 +44,7 @@ export function RatingContainer() {
   });
 
   return (
-    <div className="no-scrollbar flex max-h-96 flex-col gap-3 overflow-auto scroll-smooth">
+    <div className="no-scrollbar flex flex-col gap-3 overflow-auto">
       {ratingList?.ratings?.map((ratingItem) => (
         <UserReview
           key={ratingItem.id}
@@ -53,10 +53,11 @@ export function RatingContainer() {
               avatar: ratingItem.user.avatar_url,
               name: ratingItem.user.name,
               rate: ratingItem.rate,
+              createdAt: ratingItem.user.created_at,
             },
             book: {
               author: ratingItem.book.author,
-              cover: ratingItem.book.cover_url.replace("public/", "/"),
+              cover: ratingItem.book.cover_url,
               summary: ratingItem.book.summary,
               title: ratingItem.book.name,
             },

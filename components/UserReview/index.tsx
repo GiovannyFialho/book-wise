@@ -1,5 +1,6 @@
 "use client";
 
+import dayjs from "dayjs";
 import Image from "next/image";
 import { FaRegStar, FaStar } from "react-icons/fa6";
 
@@ -11,6 +12,7 @@ interface UserReviewProps {
       avatar: string;
       name: string;
       rate: number;
+      createdAt: Date;
     };
     book: {
       cover: string;
@@ -30,7 +32,9 @@ export function UserReview({ data }: UserReviewProps) {
 
           <div className="flex flex-col">
             <h3 className="text-base">{data.author.name}</h3>
-            <p className="text-sm text-gray-400">Hoje</p>
+            <p className="text-sm text-gray-400">
+              {dayjs(data.author.createdAt).get("year")}
+            </p>
           </div>
         </div>
 
