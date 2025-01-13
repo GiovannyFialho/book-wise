@@ -2,9 +2,8 @@
 
 import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
-import { User } from "phosphor-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/Avatar";
 
 export function AsideProfile() {
   const { data: session } = useSession();
@@ -13,13 +12,7 @@ export function AsideProfile() {
     <div>
       <div className="flex flex-col items-center gap-5">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-vertical">
-          <Avatar className="h-20 w-20 p-1">
-            <AvatarImage src={session?.user.avatar_url} alt="" />
-
-            <AvatarFallback className="bg-gray-950">
-              <User size={40} />
-            </AvatarFallback>
-          </Avatar>
+          <Avatar image={session?.user.avatar_url} size="lg" />
         </div>
 
         <div className="space-y-0">
