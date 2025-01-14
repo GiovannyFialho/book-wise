@@ -1,8 +1,9 @@
 "use client";
 
-import dayjs from "dayjs";
 import Image from "next/image";
 import { FaRegStar, FaStar } from "react-icons/fa6";
+
+import { formatDate } from "@/utils/formatData";
 
 import { Avatar } from "@/components/Avatar";
 
@@ -33,7 +34,7 @@ export function UserReview({ data }: UserReviewProps) {
           <div className="flex flex-col">
             <h3 className="text-base">{data.author.name}</h3>
             <p className="text-sm text-gray-400">
-              {dayjs(data.author.createdAt).get("year")}
+              {formatDate(data.author.createdAt)}
             </p>
           </div>
         </div>

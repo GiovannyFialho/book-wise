@@ -1,29 +1,13 @@
 "use client";
 
-import { Book, CategoriesOnBooks, Category, Rating } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { BookmarkSimple, BookOpen, Books, UserList } from "phosphor-react";
 
-import { api } from "@/lib/axios";
-
 import { Avatar } from "@/components/Avatar";
-
-interface AsideProfileProps {
-  userId: string;
-}
-
-export type ProfileRating = Rating & {
-  book: Book & {
-    categories: CategoriesOnBooks &
-      {
-        category: Category;
-      }[];
-  };
-};
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type ProfileData = {
-  ratings: ProfileRating[];
+  isLoading?: boolean;
   user: {
     avatar_url: string;
     name: string;
@@ -35,31 +19,35 @@ export type ProfileData = {
   mostReadCategory?: string;
 };
 
-export function AsideProfile({ userId }: AsideProfileProps) {
-  const { data: profile } = useQuery<ProfileData>({
-    queryKey: ["user", userId],
-    queryFn: async () => {
-      const { data } = await api.get(`/profile/${userId}`);
-
-      return data?.profile ?? {};
-    },
-  });
-
+export function AsideProfile({
+  isLoading,
+  user,
+  readPages,
+  ratedBooks,
+  readAuthors,
+  mostReadCategory,
+}: ProfileData) {
   return (
-    <div className="flex flex-col items-center py-5">
+    <div className="sticky top-5 flex flex-col items-center border-l border-gray-700 py-5">
       <div className="flex flex-col items-center gap-5">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-vertical">
-          <Avatar image={profile?.user.avatar_url} size="lg" />
+          <Avatar image={user.avatar_url} size="lg" />
         </div>
 
         <div className="space-y-0">
-          <h2 className="text-center text-xl font-bold">
-            {profile?.user.name}
-          </h2>
+          {isLoading ? (
+            <Skeleton className="mb-2 h-3 w-28 bg-gray-500" />
+          ) : (
+            <h2 className="text-center text-xl font-bold">{user.name}</h2>
+          )}
 
-          <h3 className="text-center text-sm text-gray-400">
-            membro desde {dayjs(profile?.user.member_since).get("year")}
-          </h3>
+          {isLoading ? (
+            <Skeleton className="h-2 w-28 bg-gray-500" />
+          ) : (
+            <h3 className="text-center text-sm text-gray-400">
+              membro desde {dayjs(user.member_since).get("year")}
+            </h3>
+          )}
         </div>
       </div>
 
@@ -70,7 +58,11 @@ export function AsideProfile({ userId }: AsideProfileProps) {
           <BookOpen size={32} className="text-green-100" />
 
           <div>
-            <h4 className="text-base font-bold">{profile?.readPages}</h4>
+            {isLoading ? (
+              <Skeleton className="mb-2 h-4 w-28 bg-gray-500" />
+            ) : (
+              <h4 className="text-base font-bold">{readPages}</h4>
+            )}
             <p className="text-sm">Páginas lidas</p>
           </div>
         </div>
@@ -79,7 +71,11 @@ export function AsideProfile({ userId }: AsideProfileProps) {
           <Books size={32} className="text-green-100" />
 
           <div>
-            <h4 className="text-base font-bold">{profile?.ratedBooks}</h4>
+            {isLoading ? (
+              <Skeleton className="mb-2 h-4 w-28 bg-gray-500" />
+            ) : (
+              <h4 className="text-base font-bold">{ratedBooks}</h4>
+            )}
             <p className="text-sm">Livros avaliados</p>
           </div>
         </div>
@@ -88,7 +84,11 @@ export function AsideProfile({ userId }: AsideProfileProps) {
           <UserList size={32} className="text-green-100" />
 
           <div>
-            <h4 className="text-base font-bold">{profile?.readAuthors}</h4>
+            {isLoading ? (
+              <Skeleton className="mb-2 h-4 w-28 bg-gray-500" />
+            ) : (
+              <h4 className="text-base font-bold">{readAuthors}</h4>
+            )}
             <p className="text-sm">Autores lidos</p>
           </div>
         </div>
@@ -97,7 +97,11 @@ export function AsideProfile({ userId }: AsideProfileProps) {
           <BookmarkSimple size={32} className="text-green-100" />
 
           <div>
-            <h4 className="text-base font-bold">{profile?.mostReadCategory}</h4>
+            {isLoading ? (
+              <Skeleton className="mb-2 h-4 w-28 bg-gray-500" />
+            ) : (
+              <h4 className="text-base font-bold">{mostReadCategory}</h4>
+            )}
             <p className="text-sm">Categoria mais lida</p>
           </div>
         </div>

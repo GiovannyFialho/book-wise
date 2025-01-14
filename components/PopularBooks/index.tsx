@@ -8,6 +8,8 @@ import { FaRegStar, FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
 
 import { api } from "@/lib/axios";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 interface PopularBooksData {
   booksWithAvgRating: {
     id: string;
@@ -30,7 +32,7 @@ interface PopularBooksData {
 }
 
 export function PopularBooks() {
-  const { data: trendingBooks } = useQuery<PopularBooksData>({
+  const { data: trendingBooks, isLoading } = useQuery<PopularBooksData>({
     queryKey: ["popular"],
     queryFn: async () => {
       const response = await api.get("/books/popular");
@@ -55,64 +57,83 @@ export function PopularBooks() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {trendingBooks?.booksWithAvgRating.map((book) => (
-            <div
-              key={book.id}
-              className="flex min-h-28 gap-5 rounded-lg bg-gray-700 p-4"
-            >
-              <div className="min-w-16 overflow-hidden rounded-lg">
-                <Image
-                  className="w-full"
-                  src="https://m.media-amazon.com/images/I/91M9xPIf10L._SY466_.jpg"
-                  width={64}
-                  height={94}
-                  alt={book.name}
+          {isLoading ? (
+            <>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="h-32 w-full rounded-md bg-gray-500"
                 />
-              </div>
+              ))}
+            </>
+          ) : (
+            <>
+              {trendingBooks && trendingBooks?.booksWithAvgRating.length > 0 ? (
+                <>
+                  {trendingBooks?.booksWithAvgRating.map((book) => (
+                    <div
+                      key={book.id}
+                      className="flex min-h-28 gap-5 rounded-lg bg-gray-700 p-4"
+                    >
+                      <div className="min-w-16 overflow-hidden rounded-lg">
+                        <Image
+                          className="w-full"
+                          src="https://m.media-amazon.com/images/I/91M9xPIf10L._SY466_.jpg"
+                          width={64}
+                          height={94}
+                          alt={book.name}
+                        />
+                      </div>
 
-              <div className="flex flex-col justify-between">
-                <div>
-                  <h3 className="line-clamp-2 text-base font-bold">
-                    {book.name}
-                  </h3>
-                  <p className="text-sm text-gray-400">{book.author}</p>
-                </div>
+                      <div className="flex flex-col justify-between">
+                        <div>
+                          <h3 className="line-clamp-2 text-base font-bold">
+                            {book.name}
+                          </h3>
+                          <p className="text-sm text-gray-400">{book.author}</p>
+                        </div>
 
-                <div className="flex gap-1">
-                  {Array.from({ length: 5 }, (_, index) => {
-                    if (index + 1 <= Math.floor(book.avgRating)) {
-                      return (
-                        <FaStar
-                          key={index}
-                          className="text-purple-100"
-                          size={24}
-                        />
-                      );
-                    } else if (
-                      index < Math.ceil(book.avgRating) &&
-                      book.avgRating % 1 !== 0
-                    ) {
-                      return (
-                        <FaRegStarHalfStroke
-                          key={index}
-                          className="text-purple-100"
-                          size={24}
-                        />
-                      );
-                    } else {
-                      return (
-                        <FaRegStar
-                          key={index}
-                          className="text-purple-100"
-                          size={24}
-                        />
-                      );
-                    }
-                  })}
-                </div>
-              </div>
-            </div>
-          ))}
+                        <div className="flex gap-1">
+                          {Array.from({ length: 5 }, (_, index) => {
+                            if (index + 1 <= Math.floor(book.avgRating)) {
+                              return (
+                                <FaStar
+                                  key={index}
+                                  className="text-purple-100"
+                                  size={24}
+                                />
+                              );
+                            } else if (
+                              index < Math.ceil(book.avgRating) &&
+                              book.avgRating % 1 !== 0
+                            ) {
+                              return (
+                                <FaRegStarHalfStroke
+                                  key={index}
+                                  className="text-purple-100"
+                                  size={24}
+                                />
+                              );
+                            } else {
+                              return (
+                                <FaRegStar
+                                  key={index}
+                                  className="text-purple-100"
+                                  size={24}
+                                />
+                              );
+                            }
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p className="text-sm text-gray-400">Nenhum livro encontrado</p>
+              )}
+            </>
+          )}
         </div>
       </div>
     </aside>

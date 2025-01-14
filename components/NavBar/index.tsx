@@ -9,6 +9,7 @@ import { Binoculars, ChartLineUp, SignIn, User } from "phosphor-react";
 import Logo from "@/assets/book-wise-logo.png";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function NavBar() {
   const pathname = usePathname();
@@ -74,7 +75,11 @@ export function NavBar() {
         </div>
 
         <div className="mt-auto">
-          {sessionStatus === "unauthenticated" ? (
+          {sessionStatus === "loading" && (
+            <Skeleton className="h-8 w-32 bg-gray-500" />
+          )}
+
+          {sessionStatus === "unauthenticated" && (
             <Link
               href="/sign-in"
               className="flex items-center gap-3 text-base font-bold text-gray-200"
@@ -83,7 +88,9 @@ export function NavBar() {
               Fazer login
               <SignIn size={24} className="text-green-100" />
             </Link>
-          ) : (
+          )}
+
+          {sessionStatus === "authenticated" && (
             <button
               type="button"
               onClick={() => signOut()}
