@@ -54,8 +54,9 @@ export function UserReview({ data }: UserReviewProps) {
       </header>
 
       <main className="flex gap-5">
-        <div className="max-w-28 overflow-hidden rounded-md">
+        <div className="min-w-28 overflow-hidden rounded-lg">
           <Image
+            className="w-full"
             src={data.book.cover}
             width={108}
             height={152}

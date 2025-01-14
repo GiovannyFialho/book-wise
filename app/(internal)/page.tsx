@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import { Header } from "@/components/Header";
+import { PopularBooks } from "@/components/PopularBooks";
 import { RatingContainer } from "@/components/RatingContainer";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function Home() {
           <RatingContainer />
         </section>
 
-        <aside className="w-full max-w-[300px] border-l border-gray-700"></aside>
+        <PopularBooks />
       </div>
     </main>
   );

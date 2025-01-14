@@ -57,7 +57,8 @@ export function RatingContainer() {
             },
             book: {
               author: ratingItem.book.author,
-              cover: "",
+              cover:
+                "https://m.media-amazon.com/images/I/91M9xPIf10L._SY466_.jpg",
               summary: ratingItem.book.summary,
               title: ratingItem.book.name,
             },
