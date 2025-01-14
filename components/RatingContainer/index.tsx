@@ -57,7 +57,7 @@ export function RatingContainer() {
             },
             book: {
               author: ratingItem.book.author,
-              cover: ratingItem.book.cover_url,
+              cover: "",
               summary: ratingItem.book.summary,
               title: ratingItem.book.name,
             },
