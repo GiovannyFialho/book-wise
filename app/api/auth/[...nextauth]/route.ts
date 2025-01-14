@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
           await prisma.user.create({
             data: {
               name: user.name,
-              email: user.email,
+              email: user.email ?? "",
               avatar_url: user.avatar_url,
             },
           });
@@ -83,16 +83,14 @@ export const authOptions: NextAuthOptions = {
       });
 
       if (user) {
-        session.user.createdAt = user.created_at;
+        session.user = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          avatar_url: user.avatar_url,
+          createdAt: user.created_at,
+        };
       }
-
-      session.user = {
-        ...session.user,
-        id: token.id as string,
-        name: token.name as string,
-        email: token.email as string,
-        avatar_url: token.avatar_url as string,
-      };
 
       return session;
     },

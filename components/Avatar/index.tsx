@@ -19,7 +19,7 @@ export function Avatar({ image, size = "lg" }: AvatarProps) {
       <UIAvatar
         className={`${size === "lg" && `h-20 w-20`} ${size === "md" && `h-14 w-14`} ${size === "sm" && `h-10 w-10`} p-1`}
       >
-        <AvatarImage src={image} alt="" className="rounded-full" />
+        <AvatarImage src={image} alt="" className="rounded-full object-cover" />
 
         <AvatarFallback className="bg-gray-950">
           <User size={40} />

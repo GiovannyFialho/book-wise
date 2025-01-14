@@ -56,7 +56,7 @@ export function NavBar() {
 
             {sessionStatus === "authenticated" && (
               <Link
-                href="/profile"
+                href={`/profile/${session.user.id}`}
                 className={`flex items-center gap-4 ${pathname !== "/profile" ? "text-gray-400 hover:text-gray-100" : ""}`}
                 aria-label="Perfil"
               >
@@ -91,7 +91,10 @@ export function NavBar() {
             >
               <div className="flex items-center gap-3">
                 <Avatar className="h-auto max-w-8">
-                  <AvatarImage src={session?.user.avatar_url} alt="" />
+                  <AvatarImage
+                    src={session?.user.avatar_url ?? undefined}
+                    alt=""
+                  />
 
                   <AvatarFallback>
                     <div className="flex h-8 w-8 items-center justify-center rounded-full border bg-gray-950">

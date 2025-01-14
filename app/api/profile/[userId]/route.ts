@@ -4,7 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { getMostFrequentString } from "@/utils/getMostFrequentString";
 
 export async function GET(request: NextRequest) {
-  const { userId } = await request.json();
+  const userId = request.nextUrl.pathname.split("/").at(-1);
+
+  if (!userId) {
+    return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+  }
 
   const profile = await prisma.user.findUnique({
     where: {
@@ -39,6 +43,7 @@ export async function GET(request: NextRequest) {
     if (!acc.includes(rating.book.author)) {
       acc.push(rating.book.author);
     }
+
     return acc;
   }, [] as string[]);
 
