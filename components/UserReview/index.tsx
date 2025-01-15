@@ -6,10 +6,12 @@ import { FaRegStar, FaStar } from "react-icons/fa6";
 import { formatDate } from "@/utils/formatData";
 
 import { Avatar } from "@/components/Avatar";
+import Link from "next/link";
 
 interface UserReviewProps {
   data: {
     author: {
+      id: string;
       avatar: string;
       name: string;
       rate: number;
@@ -28,7 +30,10 @@ export function UserReview({ data }: UserReviewProps) {
   return (
     <article className="flex w-full flex-col gap-8 rounded-lg bg-gray-700 p-6">
       <header className="flex justify-between gap-4">
-        <div className="flex items-center gap-4">
+        <Link
+          href={`/profile/${data.author.id}`}
+          className="flex items-center gap-4"
+        >
           <Avatar image={data.author.avatar} size="sm" />
 
           <div className="flex flex-col">
@@ -37,7 +42,7 @@ export function UserReview({ data }: UserReviewProps) {
               {formatDate(data.author.createdAt)}
             </p>
           </div>
-        </div>
+        </Link>
 
         <div className="flex gap-1">
           {Array.from({ length: 5 }, (_, index) => {

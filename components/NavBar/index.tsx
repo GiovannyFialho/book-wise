@@ -58,10 +58,10 @@ export function NavBar() {
             {sessionStatus === "authenticated" && (
               <Link
                 href={`/profile/${session.user.id}`}
-                className={`flex items-center gap-4 ${pathname !== "/profile" ? "text-gray-400 hover:text-gray-100" : ""}`}
+                className={`flex items-center gap-4 ${!pathname.includes("profile") ? "text-gray-400 hover:text-gray-100" : ""}`}
                 aria-label="Perfil"
               >
-                {pathname === "/profile" && (
+                {pathname.includes("profile") && (
                   <div className="h-[24px] w-[4px] rounded-full bg-gradient-vertical"></div>
                 )}
 

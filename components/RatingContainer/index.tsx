@@ -65,6 +65,7 @@ export function RatingContainer() {
                   key={ratingItem.id}
                   data={{
                     author: {
+                      id: ratingItem.user.id,
                       avatar: ratingItem.user.avatar_url,
                       name: ratingItem.user.name,
                       rate: ratingItem.rate,
