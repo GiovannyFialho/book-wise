@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { CaretRight } from "phosphor-react";
-import { FaRegStar, FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
 
 import { api } from "@/lib/axios";
 
+import { RatingStars } from "@/components/RatingStars";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PopularBooksData {
@@ -93,38 +93,7 @@ export function PopularBooks() {
                           <p className="text-sm text-gray-400">{book.author}</p>
                         </div>
 
-                        <div className="flex gap-1">
-                          {Array.from({ length: 5 }, (_, index) => {
-                            if (index + 1 <= Math.floor(book.avgRating)) {
-                              return (
-                                <FaStar
-                                  key={index}
-                                  className="text-purple-100"
-                                  size={24}
-                                />
-                              );
-                            } else if (
-                              index < Math.ceil(book.avgRating) &&
-                              book.avgRating % 1 !== 0
-                            ) {
-                              return (
-                                <FaRegStarHalfStroke
-                                  key={index}
-                                  className="text-purple-100"
-                                  size={24}
-                                />
-                              );
-                            } else {
-                              return (
-                                <FaRegStar
-                                  key={index}
-                                  className="text-purple-100"
-                                  size={24}
-                                />
-                              );
-                            }
-                          })}
-                        </div>
+                        <RatingStars rate={book.avgRating} />
                       </div>
                     </div>
                   ))}

@@ -10,11 +10,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { CaretLeft, MagnifyingGlass } from "phosphor-react";
 import { useMemo, useState } from "react";
-import { FaRegStar, FaStar } from "react-icons/fa6";
 
 import { api } from "@/lib/axios";
 
 import { AsideProfile, type ProfileData } from "@/components/AsideProfile";
+import { RatingStars } from "@/components/RatingStars";
 
 dayjs.extend(relativeTime);
 dayjs.locale("pt-br");
@@ -119,27 +119,7 @@ export function ProfileContent({ userId }: ProfileContentProps) {
                           </p>
                         </div>
 
-                        <div className="flex gap-1">
-                          {Array.from({ length: 5 }, (_, index) => {
-                            if (index + 1 <= rateBook.rate) {
-                              return (
-                                <FaStar
-                                  key={index}
-                                  className="text-purple-100"
-                                  size={24}
-                                />
-                              );
-                            } else {
-                              return (
-                                <FaRegStar
-                                  key={index}
-                                  className="text-purple-100"
-                                  size={24}
-                                />
-                              );
-                            }
-                          })}
-                        </div>
+                        <RatingStars rate={rateBook.rate} />
                       </div>
                     </div>
 

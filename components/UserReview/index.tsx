@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { FaRegStar, FaStar } from "react-icons/fa6";
+import Link from "next/link";
 
 import { formatDate } from "@/utils/formatData";
 
 import { Avatar } from "@/components/Avatar";
-import Link from "next/link";
+import { RatingStars } from "@/components/RatingStars";
 
 interface UserReviewProps {
   data: {
@@ -44,19 +44,7 @@ export function UserReview({ data }: UserReviewProps) {
           </div>
         </Link>
 
-        <div className="flex gap-1">
-          {Array.from({ length: 5 }, (_, index) => {
-            if (index + 1 <= data.author.rate) {
-              return (
-                <FaStar key={index} className="text-purple-100" size={24} />
-              );
-            } else {
-              return (
-                <FaRegStar key={index} className="text-purple-100" size={24} />
-              );
-            }
-          })}
-        </div>
+        <RatingStars rate={data.author.rate} />
       </header>
 
       <main className="flex gap-5">

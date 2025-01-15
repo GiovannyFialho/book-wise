@@ -6,16 +6,18 @@ import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET(request: NextRequest) {
-  const { categoryId } = await request.json();
+  const categoryId = request.nextUrl.searchParams.get("category") ?? "";
 
   const books = await prisma.book.findMany({
-    where: {
-      categories: {
-        some: {
-          categoryId,
-        },
-      },
-    },
+    where: categoryId
+      ? {
+          categories: {
+            some: {
+              categoryId,
+            },
+          },
+        }
+      : {},
     include: {
       ratings: true,
     },

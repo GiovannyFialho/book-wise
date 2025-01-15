@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { Header } from "@/components/Header";
+import { ExploreContent } from "@/components/ExploreContent";
 
 export const metadata: Metadata = {
   title: "BookWise | Explorar",
@@ -8,10 +8,8 @@ export const metadata: Metadata = {
 
 export default function Explore() {
   return (
-    <main className="mt-14 flex gap-16">
-      <Header title="Explorar" page="explore" />
-
-      <aside></aside>
+    <main className="mt-14 w-full">
+      <ExploreContent />
     </main>
   );
 }
