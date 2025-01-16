@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
-  const { bookId } = await request.json();
+  const bookId = request.nextUrl.pathname.split("/").at(-1);
 
   const book = await prisma.book.findUnique({
     where: {

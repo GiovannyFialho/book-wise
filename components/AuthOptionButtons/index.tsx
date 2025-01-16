@@ -9,16 +9,16 @@ import GitHubIcon from "@/assets/icons/github-icon.svg";
 import GoogleIcon from "@/assets/icons/google-icon.svg";
 import RocketIcon from "@/assets/icons/rocket-icon.svg";
 
-export function AuthOptionButtons() {
-  async function handleSignIn(provider: OAuthProviderType) {
-    const result = await signIn(provider, { callbackUrl: "/" });
+export async function handleSignIn(provider: OAuthProviderType) {
+  const result = await signIn(provider, { callbackUrl: "/" });
 
-    if (result?.error) {
-      console.error("Erro ao autenticar:", result.error);
-      alert("Erro ao autenticar. Tente novamente.");
-    }
+  if (result?.error) {
+    console.error("Erro ao autenticar:", result.error);
+    alert("Erro ao autenticar. Tente novamente.");
   }
+}
 
+export function AuthOptionButtons() {
   return (
     <div className="flex flex-col gap-4">
       <button

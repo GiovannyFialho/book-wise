@@ -1,16 +1,37 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
 
 import { api } from "@/lib/axios";
 
+import { handleSignIn } from "@/components/AuthOptionButtons";
 import { Badge } from "@/components/Badge";
+import { EvaluationPanel } from "@/components/EvaluationPanel";
 import { Header } from "@/components/Header";
 import { RatingStars } from "@/components/RatingStars";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Sheet } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+
+import GitHubIcon from "@/assets/icons/github-icon.svg";
+import GoogleIcon from "@/assets/icons/google-icon.svg";
+
+interface SelectedBook {
+  id: string | null;
+  status: boolean;
+}
 
 interface CategoriesData {
   categories: {
@@ -35,10 +56,17 @@ interface BooksData {
 }
 
 export function ExploreContent() {
+  const { status: sessionStatus } = useSession();
+
   const [search, setSearch] = useState("");
   const [isCategorySelected, setIsCategorySelected] = useState<string | null>(
     null,
   );
+  const [bookSelected, setBookSelected] = useState<SelectedBook>({
+    id: null,
+    status: false,
+  });
+  const [authDiagloOpen, setAuthDiagloOpen] = useState(false);
 
   const { data: categoriesData, isLoading: categoriesLoading } =
     useQuery<CategoriesData>({
@@ -141,7 +169,19 @@ export function ExploreContent() {
                   {filteredBooks?.map((book) => (
                     <div
                       key={book.id}
-                      className="flex gap-5 rounded-md bg-gray-700 px-5 py-4"
+                      className={`flex cursor-pointer gap-5 rounded-md border-2 bg-gray-700 px-5 py-4 transition-all duration-300 hover:border-green-100 ${bookSelected.id === book.id ? "border-green-100" : "border-gray-700"} `}
+                      onClick={() => {
+                        if (sessionStatus === "unauthenticated") {
+                          setAuthDiagloOpen(true);
+                        }
+
+                        if (sessionStatus === "authenticated") {
+                          setBookSelected({
+                            id: book.id,
+                            status: true,
+                          });
+                        }
+                      }}
                     >
                       <Image
                         className="w-24 rounded-md"
@@ -167,6 +207,65 @@ export function ExploreContent() {
           )}
         </div>
       </div>
+
+      <Sheet
+        open={bookSelected.status}
+        onOpenChange={(open) => {
+          if (open) {
+            setBookSelected({
+              ...bookSelected,
+              status: true,
+            });
+          } else {
+            setBookSelected({
+              id: null,
+              status: false,
+            });
+          }
+        }}
+      >
+        <EvaluationPanel id={bookSelected.id} />
+      </Sheet>
+
+      <AlertDialog open={authDiagloOpen} onOpenChange={setAuthDiagloOpen}>
+        <AlertDialogContent className="max-w-2xl rounded-md border-gray-700 bg-gray-700 px-16 py-14">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-center text-xl font-bold">
+              Faça login para deixar sua avaliação
+            </AlertDialogTitle>
+
+            <AlertDialogDescription className="text-center text-base text-gray-100">
+              Escolha uma das opções abaixo
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div className="mb-5 mt-10 flex flex-col gap-4">
+            <button
+              type="button"
+              className="flex items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 transition-all duration-300 hover:bg-gray-700"
+              onClick={() => handleSignIn("google")}
+            >
+              <Image src={GoogleIcon} alt="" />
+              Entrar com Google
+            </button>
+
+            <button
+              type="button"
+              className="flex items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 transition-all duration-300 hover:bg-gray-700"
+              onClick={() => handleSignIn("github")}
+            >
+              <Image src={GitHubIcon} alt="" />
+              Entrar com GitHub
+            </button>
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-0 bg-transparent p-0 hover:bg-transparent hover:text-gray-100">
+              Cancel
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

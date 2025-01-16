@@ -10,6 +10,15 @@ import { api } from "@/lib/axios";
 import { RatingStars } from "@/components/RatingStars";
 import { Skeleton } from "@/components/ui/skeleton";
 
+export interface Rating {
+  id: string;
+  rate: number;
+  description: string;
+  created_at: string;
+  book_id: string;
+  user_id: string;
+}
+
 interface PopularBooksData {
   booksWithAvgRating: {
     id: string;
@@ -19,14 +28,7 @@ interface PopularBooksData {
     cover_url: string;
     total_pages: number;
     created_at: Date;
-    ratings: {
-      id: string;
-      rate: number;
-      description: string;
-      created_at: string;
-      book_id: string;
-      user_id: string;
-    }[];
+    ratings: Rating[];
     avgRating: number;
   }[];
 }
