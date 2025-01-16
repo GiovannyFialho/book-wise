@@ -145,7 +145,7 @@ export function ExploreContent() {
                     >
                       <Image
                         className="w-24 rounded-md"
-                        src="https://m.media-amazon.com/images/I/91M9xPIf10L._SY466_.jpg"
+                        src={book.cover_url}
                         width={108}
                         height={152}
                         alt={book.name}

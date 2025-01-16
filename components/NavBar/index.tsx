@@ -18,7 +18,7 @@ export function NavBar() {
 
   return (
     <div className="sticky top-5 h-[calc(100vh-40px)]">
-      <div className="flex h-full w-[230px] flex-col justify-between rounded-xl bg-[url('/images/background-nav.svg')] px-12 pb-6 pt-10">
+      <div className="flex h-full w-[230px] flex-col justify-between rounded-xl bg-[url('/images/assets/background-nav.svg')] px-12 pb-6 pt-10">
         <div className="flex flex-col gap-10">
           <Link href="/">
             <Image src={Logo} alt="BookWise" />

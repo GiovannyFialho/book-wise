@@ -78,7 +78,7 @@ export function PopularBooks() {
                       <div className="min-w-16 overflow-hidden rounded-lg">
                         <Image
                           className="w-full"
-                          src="https://m.media-amazon.com/images/I/91M9xPIf10L._SY466_.jpg"
+                          src={book.cover_url}
                           width={64}
                           height={94}
                           alt={book.name}

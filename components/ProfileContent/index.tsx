@@ -103,7 +103,7 @@ export function ProfileContent({ userId }: ProfileContentProps) {
                     <div className="flex gap-6">
                       <Image
                         className="w-24 rounded-md"
-                        src="https://m.media-amazon.com/images/I/91M9xPIf10L._SY466_.jpg"
+                        src={rateBook.book.cover_url}
                         width={98}
                         height={134}
                         alt={rateBook.book.name}
