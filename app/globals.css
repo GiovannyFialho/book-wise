@@ -85,8 +85,27 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--gray-700);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray-600);
+      border-radius: 50px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #303a5d;
+    }
   }
 
   input {
