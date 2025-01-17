@@ -1,6 +1,6 @@
 DATABASE_URL="file:./dev.db"
 
-# Google Auth -> Google Cloud > BookWise > APIs e Serviços > Credenciais > Next.js client
+# Google Auth -> Google Cloud > BookWise > APIs & Services > Credentials > BookWise client
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
@@ -9,8 +9,8 @@ GITHUB_ID=
 GITHUB_SECRET=
 
 # Next
-## URL do projeto
+## Project URL
 NEXTAUTH_URL=
 
-## Sequência de números aleatórios
+## Random string sequence. Run the command: `openssl rand -base64 32`
 NEXTAUTH_SECRET=
