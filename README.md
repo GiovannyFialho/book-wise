@@ -29,9 +29,9 @@ npm run prisma:migrate:createOnly
 ```
 
 ### Images
-> The images are inside `assets.zip`. You need to unzip it and place all the content inside:
+> All book images and project assets are contained in the `public.zip` file. Simply unzip the folder to the root of the project, and you're all set!
 ```
-book-wise/public
+book-wise/
 ```
 
 ### Environments

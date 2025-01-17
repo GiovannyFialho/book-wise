@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+#public
+public/*
+
 # data base
 prisma/migrations/
 *.db
