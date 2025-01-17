@@ -13,23 +13,23 @@ npm install
 You will need to create a `.env` file based on the `env-example` file.
 
 ### Database
-> The project uses SQLite as the database and Prisma as the ORM. To create the database, run:
+The project uses SQLite as the database and Prisma as the ORM. To create the database, run:
 ```
 npm run prisma:populate
 ```
 
-> Whenever you need to create a new table, you need to run a migration:
+Whenever you need to create a new table, you need to run a migration:
 ```
 npm run prisma:migrate
 ```
 
-> Whenever you need to modify an existing table, you will need to update the migration:
+Whenever you need to modify an existing table, you will need to update the migration:
 ```
 npm run prisma:migrate:createOnly
 ```
 
 ### Images
-> All book images and project assets are contained in the `public.zip` file. Simply unzip the folder to the root of the project, and you're all set!
+All book images and project assets are contained in the `public.zip` file. Simply unzip the folder to the root of the project, and you're all set!
 ```
 book-wise/
 ```
