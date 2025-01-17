@@ -15,6 +15,7 @@ import { api } from "@/lib/axios";
 
 import { AsideProfile, type ProfileData } from "@/components/AsideProfile";
 import { RatingStars } from "@/components/RatingStars";
+import { Skeleton } from "@/components/ui/skeleton";
 
 dayjs.extend(relativeTime);
 dayjs.locale("pt-br");
@@ -93,47 +94,61 @@ export function ProfileContent({ userId }: ProfileContentProps) {
             </div>
 
             <div className="flex flex-col gap-6">
-              {filteredRatings?.map((rateBook) => (
-                <div key={rateBook.id} className="flex flex-col gap-2">
-                  <p className="text-sm text-gray-300">
-                    {dayjs().to(dayjs(rateBook.created_at))}
-                  </p>
+              {isLoading ? (
+                <>
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="flex flex-col gap-2">
+                      <Skeleton className="h-4 w-32 bg-gray-600" />
 
-                  <div className="flex w-full flex-col gap-6 rounded-lg bg-gray-700 p-6">
-                    <div className="flex gap-6">
-                      <Image
-                        className="w-24 rounded-md"
-                        src={rateBook.book.cover_url}
-                        width={98}
-                        height={134}
-                        alt={rateBook.book.name}
-                      />
+                      <Skeleton className="h-60 w-full bg-gray-600" />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {filteredRatings?.map((rateBook) => (
+                    <div key={rateBook.id} className="flex flex-col gap-2">
+                      <p className="text-sm text-gray-300">
+                        {dayjs().to(dayjs(rateBook.created_at))}
+                      </p>
 
-                      <div className="flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-lg font-bold">
-                            {rateBook.book.name}
-                          </h3>
-                          <p className="text-sm text-gray-400">
-                            {rateBook.book.author}
-                          </p>
+                      <div className="flex w-full flex-col gap-6 rounded-lg bg-gray-700 p-6">
+                        <div className="flex gap-6">
+                          <Image
+                            className="w-24 rounded-md"
+                            src={rateBook.book.cover_url}
+                            width={98}
+                            height={134}
+                            alt={rateBook.book.name}
+                          />
+
+                          <div className="flex flex-col justify-between">
+                            <div>
+                              <h3 className="text-lg font-bold">
+                                {rateBook.book.name}
+                              </h3>
+                              <p className="text-sm text-gray-400">
+                                {rateBook.book.author}
+                              </p>
+                            </div>
+
+                            <RatingStars rate={rateBook.rate} />
+                          </div>
                         </div>
 
-                        <RatingStars rate={rateBook.rate} />
+                        <p className="text-sm text-gray-300">
+                          {rateBook.description}
+                        </p>
                       </div>
                     </div>
+                  ))}
 
-                    <p className="text-sm text-gray-300">
-                      {rateBook.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              {!filteredRatings ||
-                (filteredRatings.length <= 0 && (
-                  <p className="text-sm">Nenhum resultado encontrado</p>
-                ))}
+                  {!filteredRatings ||
+                    (filteredRatings.length <= 0 && (
+                      <p className="text-sm">Nenhum resultado encontrado</p>
+                    ))}
+                </>
+              )}
             </div>
           </div>
         </section>
