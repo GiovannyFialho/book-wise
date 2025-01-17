@@ -1,6 +1,8 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -8,11 +10,15 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { BookmarkSimple, BookOpen, Check, X } from "phosphor-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 dayjs.extend(relativeTime);
 dayjs.locale("pt-br");
 
 import { api } from "@/lib/axios";
+
+import { useToast } from "@/hooks/use-toast";
 
 import { handleSignIn } from "@/components/AuthOptionButtons";
 import { Avatar } from "@/components/Avatar";
@@ -41,6 +47,25 @@ import { Textarea } from "@/components/ui/textarea";
 import GitHubIcon from "@/assets/icons/github-icon.svg";
 import GoogleIcon from "@/assets/icons/google-icon.svg";
 
+const ratingFormSchema = z.object({
+  description: z.string().max(450),
+  rate: z
+    .number()
+    .min(1, { message: "Para continuar, é necessário atribuir uma nota." })
+    .max(5),
+});
+
+type RatingFormData = z.infer<typeof ratingFormSchema>;
+
+interface ApiErrorResponse {
+  code:
+    | "ALREADY_RATED"
+    | "BOOK_ID_MISSING"
+    | "CHECK_RATING_ERROR"
+    | "USER_ID_MISSING";
+  error: string;
+}
+
 interface BookDataRating extends Rating {
   user: {
     id: string;
@@ -58,6 +83,10 @@ interface BookDataCategories {
     id: string;
     name: string;
   };
+}
+
+interface BookReviewedData {
+  hasRated: boolean;
 }
 
 interface BookData {
@@ -84,10 +113,41 @@ export function EvaluationPanel({ id, onClosed }: EvaluationPanelProps) {
   const { data: session, status: sessionStatus } = useSession();
 
   const [authDiagloOpen, setAuthDiagloOpen] = useState(false);
-  const [newEvaluationOpen, setNewEvaluationOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [isRatingFormVisible, setIsRatingFormVisible] = useState(false);
+
+  const { toast } = useToast();
 
   const maxLength = 450;
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<RatingFormData>({
+    resolver: zodResolver(ratingFormSchema),
+    defaultValues: {
+      description: "",
+      rate: 0,
+    },
+  });
+
+  const { data: bookReviewed, isLoading: bookReviewedLoading } =
+    useQuery<BookReviewedData>({
+      queryKey: ["book-has-reviewed", session?.user.id],
+      queryFn: async () => {
+        const response = await api.get(`/books/details/${id}/has-reviewed`, {
+          params: {
+            userId: session?.user.id,
+          },
+        });
+
+        return response.data;
+      },
+      enabled: !!session?.user.id && !!id,
+    });
 
   const { data, isLoading } = useQuery<BookData>({
     queryKey: ["book-detail", id],
@@ -98,6 +158,36 @@ export function EvaluationPanel({ id, onClosed }: EvaluationPanelProps) {
     },
     enabled: !!id,
   });
+
+  function handleResetState() {
+    reset();
+    setIsRatingFormVisible(false);
+    onClosed();
+  }
+
+  async function handleRateBook(data: RatingFormData) {
+    const { description, rate } = data;
+
+    try {
+      await api.post(`/books/${id}/rate`, {
+        userId: session?.user.id,
+        description,
+        rate,
+      });
+    } catch (err) {
+      const error = err as AxiosError<ApiErrorResponse>;
+
+      if (error.response?.data?.code === "ALREADY_RATED") {
+        toast({
+          variant: "destructive",
+          title: "Ops!",
+          description: "Você já avaliou esse livro",
+        });
+      }
+    }
+
+    handleResetState();
+  }
 
   return (
     <>
@@ -195,27 +285,33 @@ export function EvaluationPanel({ id, onClosed }: EvaluationPanelProps) {
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm text-gray-200">Avaliações</h2>
 
-                  {!newEvaluationOpen && (
-                    <button
-                      type="button"
-                      className="text-base font-bold text-purple-100"
-                      onClick={() => {
-                        if (sessionStatus === "unauthenticated") {
-                          setAuthDiagloOpen(true);
-                        }
+                  {bookReviewedLoading ? (
+                    <Skeleton className="h-4 w-16 rounded-sm bg-gray-500" />
+                  ) : (
+                    <>
+                      {!bookReviewed?.hasRated && (
+                        <button
+                          type="button"
+                          className="text-base font-bold text-purple-100"
+                          onClick={() => {
+                            if (sessionStatus === "unauthenticated") {
+                              setAuthDiagloOpen(true);
+                            }
 
-                        if (sessionStatus === "authenticated") {
-                          setNewEvaluationOpen(true);
-                        }
-                      }}
-                    >
-                      Avaliar
-                    </button>
+                            if (sessionStatus === "authenticated") {
+                              setIsRatingFormVisible(true);
+                            }
+                          }}
+                        >
+                          Avaliar
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {newEvaluationOpen && (
+                  {isRatingFormVisible && (
                     <div className="flex w-full flex-col gap-6 rounded-md bg-gray-700 p-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -229,18 +325,22 @@ export function EvaluationPanel({ id, onClosed }: EvaluationPanelProps) {
                           </h5>
                         </div>
 
-                        <StarRating onRate={(rate) => console.log({ rate })} />
+                        <StarRating onRate={(rate) => setValue("rate", rate)} />
                       </div>
 
-                      <div className="flex flex-col items-end gap-3">
+                      <form
+                        onSubmit={handleSubmit(handleRateBook)}
+                        className="flex flex-col items-end gap-3"
+                      >
                         <div className="relative w-full rounded-sm border-gray-500 bg-gray-800">
                           <Textarea
                             placeholder="Escreva sua avaliação"
                             maxLength={maxLength}
                             className="custom-scrollbar min-h-32 border-0 bg-transparent text-sm text-gray-200"
-                            onChange={(event) =>
-                              setCharCount(event.target.value.length)
-                            }
+                            {...register("description")}
+                            onChange={(event) => {
+                              setCharCount(event.target.value.length);
+                            }}
                           />
 
                           <span className="absolute bottom-2 right-3 text-xs text-[#7C7C8A]">
@@ -252,10 +352,7 @@ export function EvaluationPanel({ id, onClosed }: EvaluationPanelProps) {
                           <Button
                             type="button"
                             className="h-10 w-10 bg-gray-600"
-                            onClick={() => {
-                              setNewEvaluationOpen(false);
-                              onClosed();
-                            }}
+                            onClick={handleResetState}
                           >
                             <X size={24} className="text-purple-100" />
                           </Button>
@@ -263,11 +360,16 @@ export function EvaluationPanel({ id, onClosed }: EvaluationPanelProps) {
                           <Button
                             type="submit"
                             className="h-10 w-10 bg-gray-600"
+                            disabled={isSubmitting}
                           >
                             <Check size={24} className="text-green-100" />
                           </Button>
                         </div>
-                      </div>
+
+                        <p className="text-sm text-red-500">
+                          {errors.rate?.message}
+                        </p>
+                      </form>
                     </div>
                   )}
 

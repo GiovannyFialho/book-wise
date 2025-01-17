@@ -6,20 +6,30 @@ import { prisma } from "@/lib/prisma";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
 
   if (!session) return new NextResponse(null, { status: 401 });
 
+  const bodySchema = z.object({
+    userId: z.string(),
+    description: z.string().max(450),
+    rate: z.number().min(1).max(5),
+  });
+
   try {
-    const { bookId, userId } = await request.json();
+    const bookId = request.nextUrl.pathname.split("/").at(-2);
 
-    const bodySchema = z.object({
-      description: z.string().max(450),
-      rate: z.number().min(1).max(5),
-    });
+    if (!bookId) {
+      return NextResponse.json(
+        { error: "Book ID is missing" },
+        { status: 400 },
+      );
+    }
 
-    const { description, rate } = bodySchema.parse(await request.json());
+    const { userId, description, rate } = bodySchema.parse(
+      await request.json(),
+    );
 
     const userAlreadyRated = await prisma.rating.findFirst({
       where: {
@@ -30,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     if (userAlreadyRated) {
       return NextResponse.json(
-        { error: "You already rated this book" },
+        { error: "You already rated this book", code: "ALREADY_RATED" },
         { status: 400 },
       );
     }

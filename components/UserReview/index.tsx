@@ -21,7 +21,7 @@ interface UserReviewProps {
       cover: string;
       title: string;
       author: string;
-      summary: string;
+      description: string;
     };
   };
 }
@@ -65,7 +65,7 @@ export function UserReview({ data }: UserReviewProps) {
           </div>
 
           <p className="text-sm font-semibold text-gray-400">
-            {data.book.summary}
+            {data.book.description}
           </p>
         </div>
       </main>

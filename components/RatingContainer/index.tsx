@@ -74,7 +74,7 @@ export function RatingContainer() {
                     book: {
                       author: ratingItem.book.author,
                       cover: ratingItem.book.cover_url,
-                      summary: ratingItem.book.summary,
+                      description: ratingItem.description,
                       title: ratingItem.book.name,
                     },
                   }}
