@@ -13,4 +13,6 @@ GITHUB_SECRET=
 NEXTAUTH_URL=
 
 ## Random string sequence. Run the command: `openssl rand -base64 32`
+> **Note:** The `openssl` command only works on macOS and Linux. If you are using Windows, you can generate the random string using an online generator or a tool like PowerShell.
 NEXTAUTH_SECRET=
+
